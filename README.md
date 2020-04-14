@@ -8,7 +8,7 @@ $ compare-strings-resx File1.resx File2.resx
 ```
 
 # Limitations
-compare-strings-resx expects to find the <data> tag and it's attribute "name" on the same line. Additionally, it is required that the "name" attribute is the first, and is only separated from the tag by one space. For example, the following syntax will not be parsed correctly by the utility:
+compare-strings-resx expects to find the &lt;data&gt; tag and it's attribute "name" on the same line. Additionally, it is required that the "name" attribute is the first, and is only separated from the tag by one space. For example, the following syntax will not be parsed correctly by the utility:
 ```xml
 <data
 name="Example">
