@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
     if (!read(argv[1], presentInFile1) || !read(argv[2], presentInFile2))
         return 1;
 
-    for (const auto& s : presentInFile2)
+    for (const auto& s : presentInFile1)
     {
-        if (!presentInFile1.contains(s))
+        if (!presentInFile2.contains(s))
             std::cout << s << std::endl;
     }
 
