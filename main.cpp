@@ -39,24 +39,21 @@ bool read(const char* filename, std::set<std::string>& set)
         return false;
     }
 
-    std::string line;
-    while (std::getline(file, line))
+    std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    std::size_t pos = 0;
+    while (true)
     {
-        std::size_t pos = 0;
-        while (true)
-        {
-            static constexpr std::string_view Prefix = "<data name=\"";
-            pos = line.find(Prefix, pos);
-            if (pos == std::string::npos)
-                break;
-            pos += Prefix.size();
+        static constexpr std::string_view Prefix = "<data name=\"";
+        pos = contents.find(Prefix, pos);
+        if (pos == std::string::npos)
+            break;
+        pos += Prefix.size();
 
-            auto end = line.find("\"", pos);
-            if (end == std::string::npos)
-                break;
+        auto end = contents.find("\"", pos);
+        if (end == std::string::npos)
+            break;
 
-            set.insert(line.substr(pos, end - pos));
-        }
+        set.insert(contents.substr(pos, end - pos));
     }
 
     return true;
