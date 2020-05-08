@@ -39,21 +39,34 @@ bool read(const char* filename, std::set<std::string>& set)
         return false;
     }
 
-    std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    std::size_t pos = 0;
+    std::string contents((std::istreambuf_iterator<char>(file)),
+                         std::istreambuf_iterator<char>());
+    std::size_t tag = 0;
     while (true)
     {
-        static constexpr std::string_view Prefix = "<data name=\"";
-        pos = contents.find(Prefix, pos);
-        if (pos == std::string::npos)
+        static constexpr std::string_view Tag = "<data";
+        tag = contents.find(Tag, tag);
+        if (tag == std::string::npos)
             break;
-        pos += Prefix.size();
+        tag += Tag.size();
 
-        auto end = contents.find("\"", pos);
+        static constexpr std::string_view Key = "name=\"";
+        std::size_t value = contents.find(Key, tag);
+        if (value == std::string::npos)
+            break;
+        value += Key.size();
+
+        std::size_t end = contents.find(">", tag);
+        if (end == std::string::npos)
+            break;
+        else if (value > end)
+            continue;
+
+        end = contents.find("\"", value);
         if (end == std::string::npos)
             break;
 
-        set.insert(contents.substr(pos, end - pos));
+        set.insert(contents.substr(value, end - value));
     }
 
     return true;
